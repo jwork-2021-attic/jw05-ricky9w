@@ -18,15 +18,17 @@
 package com.ricky.screen;
 
 import com.ricky.asciiPanel.AsciiPanel;
-import java.awt.event.KeyEvent;
 
 /**
  *
  * @author Aeranythe Echosong
  */
-public interface Screen {
+public class StartScreen extends RestartScreen {
 
-    public void displayOutput(AsciiPanel terminal);
+    @Override
+    public void displayOutput(AsciiPanel terminal) {
+        terminal.write("This is the start screen.", 0, 0);
+        terminal.write("Press ENTER to continue...", 0, 1);
+    }
 
-    public Screen respondToUserInput(KeyEvent key);
 }

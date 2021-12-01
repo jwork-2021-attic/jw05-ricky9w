@@ -15,18 +15,33 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package com.ricky.screen;
+package com.ricky.world;
 
-import com.ricky.asciiPanel.AsciiPanel;
-import java.awt.event.KeyEvent;
+import java.util.List;
 
 /**
  *
  * @author Aeranythe Echosong
  */
-public interface Screen {
+public class PlayerAI extends CreatureAI {
 
-    public void displayOutput(AsciiPanel terminal);
+    private List<String> messages;
 
-    public Screen respondToUserInput(KeyEvent key);
+    public PlayerAI(Creature creature, List<String> messages) {
+        super(creature);
+        this.messages = messages;
+    }
+
+    public void onEnter(int x, int y, Tile tile) {
+        if (tile.isGround()) {
+            creature.setX(x);
+            creature.setY(y);
+        } else if (tile.isDiggable()) {
+            creature.dig(x, y);
+        }
+    }
+
+    public void onNotify(String message) {
+        this.messages.add(message);
+    }
 }

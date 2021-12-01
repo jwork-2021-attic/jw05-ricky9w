@@ -1,7 +1,3 @@
-package com.ricky.world;
-
-import com.ricky.asciiPanel.AsciiPanel;
-import java.awt.Color;
 /*
  * Copyright (C) 2015 Aeranythe Echosong
  *
@@ -19,41 +15,43 @@ import java.awt.Color;
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+package com.ricky.world;
+
+import java.awt.Point;
 
 /**
  *
  * @author Aeranythe Echosong
  */
-public enum Tile {
+class CreatureAI {
 
-    FLOOR((char) 250, AsciiPanel.green),
+    protected Creature creature;
 
-    WALL((char) 177, AsciiPanel.brightBlack),
-
-    BOUNDS('x', AsciiPanel.magenta);
-
-    private char glyph;
-
-    public char glyph() {
-        return glyph;
+    public CreatureAI(Creature creature) {
+        this.creature = creature;
+        this.creature.setAI(this);
     }
 
-    private Color color;
-
-    public Color color() {
-        return color;
+    public void onEnter(int x, int y, Tile tile) {
     }
 
-    public boolean isDiggable() {
-        return this != Tile.WALL;
+    public void onUpdate() {
     }
 
-    public boolean isGround() {
-        return this != Tile.WALL && this != Tile.BOUNDS;
+    public void onNotify(String message) {
     }
 
-    Tile(char glyph, Color color) {
-        this.glyph = glyph;
-        this.color = color;
+    public boolean canSee(int x, int y) {
+        if ((creature.x() - x) * (creature.x() - x) + (creature.y() - y) * (creature.y() - y) > creature.visionRadius()
+                * creature.visionRadius()) {
+            return false;
+        }
+        for (Point p : new Line(creature.x(), creature.y(), x, y)) {
+            if (creature.tile(p.x, p.y).isGround() || (p.x == x && p.y == y)) {
+                continue;
+            }
+            return false;
+        }
+        return true;
     }
 }

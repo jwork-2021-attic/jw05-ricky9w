@@ -18,15 +18,16 @@
 package com.ricky.screen;
 
 import com.ricky.asciiPanel.AsciiPanel;
-import java.awt.event.KeyEvent;
 
 /**
  *
  * @author Aeranythe Echosong
  */
-public interface Screen {
+public class WinScreen extends RestartScreen {
 
-    public void displayOutput(AsciiPanel terminal);
+    @Override
+    public void displayOutput(AsciiPanel terminal) {
+        terminal.write("You won! Press enter to go again.", 0, 0);
+    }
 
-    public Screen respondToUserInput(KeyEvent key);
 }

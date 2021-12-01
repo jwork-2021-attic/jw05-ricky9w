@@ -15,18 +15,35 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package com.ricky.screen;
+package com.ricky.world;
+
+import java.util.List;
 
 import com.ricky.asciiPanel.AsciiPanel;
-import java.awt.event.KeyEvent;
 
 /**
  *
  * @author Aeranythe Echosong
  */
-public interface Screen {
+public class CreatureFactory {
 
-    public void displayOutput(AsciiPanel terminal);
+    private World world;
 
-    public Screen respondToUserInput(KeyEvent key);
+    public CreatureFactory(World world) {
+        this.world = world;
+    }
+
+    public Creature newPlayer(List<String> messages) {
+        Creature player = new Creature(this.world, (char)2, AsciiPanel.brightWhite, 100, 20, 5, 9);
+        world.addAtEmptyLocation(player);
+        new PlayerAI(player, messages);
+        return player;
+    }
+
+    public Creature newFungus() {
+        Creature fungus = new Creature(this.world, (char)3, AsciiPanel.green, 10, 0, 0, 0);
+        world.addAtEmptyLocation(fungus);
+        new FungusAI(fungus, this);
+        return fungus;
+    }
 }

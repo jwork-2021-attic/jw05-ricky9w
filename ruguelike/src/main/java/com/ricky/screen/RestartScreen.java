@@ -24,9 +24,19 @@ import java.awt.event.KeyEvent;
  *
  * @author Aeranythe Echosong
  */
-public interface Screen {
+public abstract class RestartScreen implements Screen {
 
-    public void displayOutput(AsciiPanel terminal);
+    @Override
+    public abstract void displayOutput(AsciiPanel terminal);
 
-    public Screen respondToUserInput(KeyEvent key);
+    @Override
+    public Screen respondToUserInput(KeyEvent key) {
+        switch (key.getKeyCode()) {
+            case KeyEvent.VK_ENTER:
+                return new PlayScreen();
+            default:
+                return this;
+        }
+    }
+
 }
