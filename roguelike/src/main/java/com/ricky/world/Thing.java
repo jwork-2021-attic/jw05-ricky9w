@@ -11,6 +11,9 @@ public class Thing {
     private final Color color;
     private final char glyph;
 
+    //上下左右
+    protected static final int[][] dirs = 
+        {{0, -1}, {0, 1}, {-1, 0}, {1, 0}};
 
     public int getX() {
         return this.tile.getxPos();

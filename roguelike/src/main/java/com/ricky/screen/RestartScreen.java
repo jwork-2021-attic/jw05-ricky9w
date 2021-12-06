@@ -16,7 +16,7 @@ public abstract class RestartScreen implements Screen {
     public Screen respondToUserInput(KeyEvent key) {
         switch (key.getKeyCode()) {
             case KeyEvent.VK_ENTER:
-                return new MazeScreen();
+                return new PlayScreen();
             default:
                 return this;
         }

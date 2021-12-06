@@ -2,6 +2,7 @@ package com.ricky.screen;
 
 import java.awt.Color;
 import java.awt.event.KeyEvent;
+import java.util.regex.PatternSyntaxException;
 
 import com.ricky.world.Player;
 import com.ricky.world.Floor;
@@ -9,14 +10,14 @@ import com.ricky.world.World;
 
 import com.ricky.asciiPanel.AsciiPanel;
 
-public class MazeScreen implements Screen {
+public class PlayScreen implements Screen {
     
     private World world;
     private Player player;
 
-    public MazeScreen() {
+    public PlayScreen() {
         world = new World();
-        player = new Player(new Color(255, 0, 0), world);
+        player = new Player(new Color(255, 0, 0), world, this);
         world.put(player, 0, 0);
     }
 
@@ -57,6 +58,10 @@ public class MazeScreen implements Screen {
             world.put(new Floor(world), xCurr, yCurr);
         }
         return this;
+    }
+
+    public Player getPlayer() {
+        return this.player;
     }
     
 }

@@ -5,8 +5,8 @@ import com.ricky.maze.*;
 
 public class World {
     
-    public static final int WIDTH = 20;
-    public static final int HEIGHT = 20;
+    public static final int WIDTH = 60;
+    public static final int HEIGHT = 60;
 
     private Tile<Thing>[][] tiles;
 
@@ -39,6 +39,20 @@ public class World {
 
     public boolean validMove(int x, int y) {
         return x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT && this.get(x, y) instanceof Floor;
+    }
+
+    // TODO: 判断给定地点放置物类型
+    public int checkPos(int x, int y) {
+        Thing t = this.get(x, y);
+        
+        return 0;
+    }
+
+    // TODO: 从地图上清除给定物体
+    public void removeThing(Thing t) {
+        int x = t.getX();
+        int y = t.getY();
+        this.tiles[x][y].setThing(new Floor(this));
     }
 
 }
