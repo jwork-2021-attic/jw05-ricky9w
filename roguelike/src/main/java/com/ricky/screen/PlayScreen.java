@@ -2,11 +2,14 @@ package com.ricky.screen;
 
 import java.awt.Color;
 import java.awt.event.KeyEvent;
-import java.util.concurrent.ConcurrentHashMap.KeySetView;
+import java.util.ArrayList;
+import java.util.Random;
 
 import com.ricky.world.Player;
 import com.ricky.world.Floor;
+import com.ricky.world.Monster;
 import com.ricky.world.World;
+import com.ricky.world.Thing;
 
 import com.ricky.asciiPanel.AsciiPanel;
 import com.ricky.control.GameControl;
@@ -17,6 +20,8 @@ public class PlayScreen implements Screen {
     private Player player;
 
     private GameControl control;
+
+    private ArrayList<Monster> monsters;
 
     // 信息显示区域
     private final int PANEL_LEFT = 40;
@@ -29,13 +34,25 @@ public class PlayScreen implements Screen {
         world = new World();
         player = new Player(new Color(255, 0, 0), world, this);
         world.put(player, 0, 0);
+
+        this.monsters = new ArrayList<Monster>();
+
+        control = new GameControl(this);
+        control.start();
+
+
+        for(int i = 0; i < MAX_MONSTERS; i++) {
+            this.addMonster();
+        }
     }
 
     private void messageUpdate(AsciiPanel terminal) {
         String hp = String.format("HP: %2d/%2d", player.getHP(), player.getMaxHP());
         String pw = String.format("Power: %d", player.getPower());
+        String bm = String.format("Bomb: %d", player.getBombs());
         terminal.write(hp, PANEL_LEFT, PANEL_TOP);
-        terminal.write(pw, PANEL_LEFT, PANEL_TOP + 10);
+        terminal.write(pw, PANEL_LEFT, PANEL_TOP + 5);
+        terminal.write(bm, PANEL_LEFT, PANEL_TOP + 10);
     }
 
     @Override
@@ -86,6 +103,23 @@ public class PlayScreen implements Screen {
 
     public Player getPlayer() {
         return this.player;
+    }
+
+    private void addMonster() {
+        Random r = new Random();
+        int x = r.nextInt(world.WIDTH);
+        int y = r.nextInt(world.HEIGHT);
+        while(true) {
+            Thing t = world.get(x, y);
+            if(t instanceof Floor)
+                break;
+            x = r.nextInt(world.WIDTH);
+            y = r.nextInt(world.HEIGHT);
+        }
+        Monster m = new Monster(new Color(0, 255, 0), world, this);
+        monsters.add(m);
+        world.put(m, x, y);
+        control.addMonster(m);
     }
     
 }

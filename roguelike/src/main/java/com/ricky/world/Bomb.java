@@ -6,6 +6,12 @@ import com.ricky.world.Creature;
 import com.ricky.world.Monster;
 import com.ricky.screen.PlayScreen;
 
-public class Bomb {
+public class Bomb extends Thing{
+
+    private Player parent;
     
+    public Bomb(Color color, World world, PlayScreen screen) {
+        super(color, (char)15, world);
+        
+    }
 }

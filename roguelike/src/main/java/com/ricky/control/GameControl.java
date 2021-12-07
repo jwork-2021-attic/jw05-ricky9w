@@ -18,6 +18,10 @@ public class GameControl implements Runnable {
         exec = Executors.newCachedThreadPool();
     }
 
+    public void start() {
+        
+    }
+
     @Override
     public void run() {
         // 开始执行玩家线程
