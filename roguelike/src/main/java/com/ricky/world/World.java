@@ -1,6 +1,9 @@
 package com.ricky.world;
 
 import java.lang.Math;
+
+import java.awt.Color;
+
 import com.ricky.maze.*;
 
 public class World {
@@ -30,6 +33,8 @@ public class World {
     }
 
     public Thing get(int x, int y) {
+        if(x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT)
+            return new Thing(new Color(0, 0, 0), (char)0, this);
         return this.tiles[x][y].getthing();
     }
 
@@ -41,18 +46,8 @@ public class World {
         return x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT && this.get(x, y) instanceof Floor;
     }
 
-    // TODO: 判断给定地点放置物类型
-    public int checkPos(int x, int y) {
-        Thing t = this.get(x, y);
-        
-        return 0;
-    }
-
-    // TODO: 从地图上清除给定物体
-    public void removeThing(Thing t) {
-        int x = t.getX();
-        int y = t.getY();
-        this.tiles[x][y].setThing(new Floor(this));
+    public boolean inBound(int x, int y) {
+        return x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT;
     }
 
 }

@@ -14,4 +14,8 @@ public class StartScreen extends RestartScreen {
         terminal.write("Press ENTER to continue...", 0, 1);
     }
 
+    public void update() {
+        
+    }
+
 }

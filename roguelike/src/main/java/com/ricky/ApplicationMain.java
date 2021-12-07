@@ -25,6 +25,7 @@ import javax.swing.JFrame;
 
 import com.ricky.asciiPanel.AsciiFont;
 import com.ricky.asciiPanel.AsciiPanel;
+import com.ricky.control.ScreenUpdate;
 import com.ricky.screen.Screen;
 import com.ricky.screen.StartScreen;
 
@@ -50,6 +51,7 @@ public class ApplicationMain extends JFrame implements KeyListener {
     @Override
     public void repaint() {
         terminal.clear();
+        screen.update();
         screen.displayOutput(terminal);
         super.repaint();
     }
@@ -81,6 +83,7 @@ public class ApplicationMain extends JFrame implements KeyListener {
         ApplicationMain app = new ApplicationMain();
         app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         app.setVisible(true);
+        new Thread(new ScreenUpdate(app)).start();
     }
 
 }

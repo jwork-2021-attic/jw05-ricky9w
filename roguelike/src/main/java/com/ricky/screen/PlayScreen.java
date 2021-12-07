@@ -6,10 +6,13 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import com.ricky.world.Player;
+import com.ricky.world.Bullet;
 import com.ricky.world.Floor;
 import com.ricky.world.Monster;
 import com.ricky.world.World;
 import com.ricky.world.Thing;
+import com.ricky.world.Prop;
+import com.ricky.world.Bomb;
 
 import com.ricky.asciiPanel.AsciiPanel;
 import com.ricky.control.GameControl;
@@ -22,13 +25,23 @@ public class PlayScreen implements Screen {
     private GameControl control;
 
     private ArrayList<Monster> monsters;
+    private ArrayList<Bullet> bullets;
+    private ArrayList<Bullet> deletedBullets;
+    private ArrayList<Bomb> bombs;
+    private ArrayList<Bomb> deletedBombs;
+    private ArrayList<Prop> props;
+    private ArrayList<Prop> deletedProps;
 
     // 信息显示区域
-    private final int PANEL_LEFT = 40;
+    private final int PANEL_LEFT = 42;
     private final int PANEL_TOP = 6;
 
     // 最大怪物数量
     private final int MAX_MONSTERS = 5;
+
+    // 子弹飞行速度
+    private final int BULLET_SPEED = 10;
+    private int bullet_wait = 0;
 
     public PlayScreen() {
         world = new World();
@@ -36,6 +49,12 @@ public class PlayScreen implements Screen {
         world.put(player, 0, 0);
 
         this.monsters = new ArrayList<Monster>();
+        this.bullets = new ArrayList<Bullet>();
+        this.deletedBullets = new ArrayList<Bullet>();
+        this.bombs = new ArrayList<Bomb>();
+        this.deletedBombs = new ArrayList<Bomb>();
+        this.props = new ArrayList<Prop>();
+        this.deletedProps = new ArrayList<Prop>();
 
         control = new GameControl(this);
         control.start();
@@ -65,38 +84,63 @@ public class PlayScreen implements Screen {
         messageUpdate(terminal);
     }
 
+    // 更新所有物体
+    public synchronized void update() {
+        // 更新子弹位置
+        bullet_wait++;
+        if(bullet_wait >= BULLET_SPEED){
+            for(Bullet b:bullets) {
+                b.action();
+            }
+            bullet_wait = 0;
+        }
+        // 删除应该消亡的子弹
+        for(Bullet b:deletedBullets) {
+            int x = b.getX();
+            int y = b.getY();
+            bullets.remove(b);
+            world.put(new Floor(world), x, y);
+        }
+        deletedBullets.clear();
+        // 删除消亡的道具
+        for(Prop p:deletedProps) {
+            props.remove(p);
+            world.put(new Floor(world), p.getX(), p.getX());
+        }
+        deletedProps.clear();
+        // 删除消亡的炸弹
+        
+    }
+
     @Override
     public Screen respondToUserInput(KeyEvent key) {
         int code = key.getKeyCode();
         if(code == KeyEvent.VK_SPACE) {
-            // TODO: 放置炸弹
+            // 放置炸弹
+            player.setBomb();
+            return this;
+
         } else if(code == KeyEvent.VK_J) {
-            // TODO: 发射子弹
+            // 发射子弹
+            player.attack();
+            return this;
         }
         // 移动
-        int xCurr = player.getX();
-        int yCurr = player.getY();
-        int xTar = xCurr;
-        int yTar = yCurr;
         switch(code) {
             case KeyEvent.VK_W:
-                yTar--;
+                player.move(0);
                 break;
             case KeyEvent.VK_S:
-                yTar++;
+                player.move(1);
                 break;
             case KeyEvent.VK_A:
-                xTar--;
+                player.move(2);
                 break;
             case KeyEvent.VK_D:
-                xTar++;
+                player.move(3);
                 break;
             default:
                 break;
-        }
-        if (world.validMove(xTar, yTar)) {
-            player.moveTo(xTar, yTar);
-            world.put(new Floor(world), xCurr, yCurr);
         }
         return this;
     }
@@ -107,19 +151,57 @@ public class PlayScreen implements Screen {
 
     private void addMonster() {
         Random r = new Random();
-        int x = r.nextInt(world.WIDTH);
-        int y = r.nextInt(world.HEIGHT);
+        int x = r.nextInt(World.WIDTH);
+        int y = r.nextInt(World.HEIGHT);
         while(true) {
             Thing t = world.get(x, y);
             if(t instanceof Floor)
                 break;
-            x = r.nextInt(world.WIDTH);
-            y = r.nextInt(world.HEIGHT);
+            x = r.nextInt(World.WIDTH);
+            y = r.nextInt(World.HEIGHT);
         }
         Monster m = new Monster(new Color(0, 255, 0), world, this);
         monsters.add(m);
         world.put(m, x, y);
         control.addMonster(m);
     }
+
+    public void deleteMonster(Monster m) {
+        int x = m.getX();
+        int y = m.getY();
+        world.put(new Floor(world), x, y);
+        monsters.remove(m);
+    }
+
+    public void addBullet(Bullet b) {
+        bullets.add(b);
+    }
+
+    public void deleteBullet(Bullet b) {
+        deletedBullets.add(b);
+    }
+
+    public void addBomb(Bomb b) {
+        bombs.add(b);
+    }
     
+    public void deleteBomb(Bomb b) {
+        deletedBombs.add(b);
+    }
+
+    public void triggerBomb() {
+        // TODO: 炸弹爆炸特效
+    }
+
+    public void addProp(Prop p) {
+        this.props.add(p);
+    }
+
+    public void deleteProp(Prop p) {
+        this.deletedProps.add(p);
+    }
+
+    public void loseGame() {
+
+    }
 }

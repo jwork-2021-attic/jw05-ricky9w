@@ -1,6 +1,7 @@
 package com.ricky.world;
 
 import java.awt.Color;
+import java.lang.annotation.Target;
 
 import com.ricky.world.Creature;
 import com.ricky.world.Monster;
@@ -32,8 +33,40 @@ public class Bullet extends Thing {
     public void action() {
         int xTar = this.getX() + Thing.dirs[dir][0];
         int yTar = this.getY() + Thing.dirs[dir][1];
-        // TODO:判断子弹下一步目标地点具体情况
+        if(!world.inBound(xTar, yTar)){
+            screen.deleteBullet(this);
+            return;
+        }
+        // 判断子弹下一步目标地点具体情况
+        Thing t = world.get(xTar, yTar);
+        if(t instanceof Creature) {
+            // 对生物造成伤害同时自身消亡
+            Creature c = (Creature) t;
+            if(c != this.parent) {
+                c.beAttacked(this.damage);
+            }
+            screen.deleteBullet(this);
+        } else if(t instanceof Bullet) {
+            //TODO:BULLET
+            Bullet b = (Bullet) t;
+            screen.deleteBullet(b);
+            screen.deleteBullet(this);
+        } else if(t instanceof Prop) {
+            Prop p = (Prop) t;
+            screen.deleteProp(p);
+        } else if(t instanceof Floor) {
+            this.moveTo(xTar, yTar);
+        } else if(t instanceof Wall) {
+            screen.deleteBullet(this);
+        }
+    }
 
+    public int getDamage() {
+        return this.damage;
+    }
+
+    public Creature getParent() {
+        return this.parent;
     }
     
 }
