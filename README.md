@@ -1,14 +1,57 @@
 [![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-f059dc9a6f8d3a56e377f745f24479a46679e63a5d9fe6f495e02850cd0d8118.svg)](https://classroom.github.com/online_ide?assignment_repo_id=6245499&assignment_repo_type=AssignmentRepo)
 # jw05
+191220119 王毓琦
 
-请将jw04的迷宫任务改造为一个ruguelike的葫芦娃与妖精两方对战游戏，游戏如下图所示。
+ricky.wang@smail.nju.edu.cn
 
-![](image-11.jpeg)
+## 文件结构
 
-需求如下：
+```
+.
+└── roguelike
+    ├── src
+    │   ├── main
+    │   │   ├── java
+    │   │   │   └── com
+    │   │   │       └── ricky
+    │   │   │           ├── asciiPanel
+    │   │   │           ├── control
+    │   │   │           ├── maze
+    │   │   │           ├── resources
+    │   │   │           ├── screen
+    │   │   │           └── world
+    │   │   └── resources
+    │   └── test
+    │       └── java
+    │           └── com
+    │               └── ricky
+    └── target
+        ├── classes
+        │   └── com
+        │       └── ricky
+        │           ├── asciiPanel
+        │           ├── control
+        │           ├── maze
+        │           ├── resources
+        │           ├── screen
+        │           └── world
+        └── test-classes
+            └── com
+                └── ricky
+```
 
-- 每个生物体都是一个线程
-- 每个生物体的移动、攻击等行为决策可使用Minimax或其他算法（可参考https://www.baeldung.com/java-minimax-algorithm）
-- 请特别注意线程race condition（两个生物体不能占据同一个tile，对同一生物体的两个攻击行为应该先后发生作用，等）
-- 请发挥想象力
-- 完成后录屏发qq群或小破站
+## 操作方法
+
+<kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> 控制上下移动, <kbd>J</kbd> 键攻击.
+
+## 架构设计
+
+使用一个独立的线程负责屏幕显示内容的更新, 每个怪物都具有一个独立的线程.
+
+`PlayScreen` 类中负责处理玩家输入和游戏数据, 并调用 `World` 类中的各类接口实现游戏主要逻辑控制和画面更新. `Screen` 类提供统一的接口 `update()` 用于进行游戏中相关数据的更新.
+
+## 效果演示
+
+<video id="video" controls="" preload="none">
+      <source id="mp4" src="./demo.mp4" type="video/mp4">
+</videos>
