@@ -32,6 +32,10 @@ public abstract class Creature extends Thing implements Runnable {
         return this.hp;
     }
 
+    public int getMaxHP() {
+        return this.maxHP;
+    }
+
     public void beAttacked(int damage) {
         this.hp -= damage;
     }
