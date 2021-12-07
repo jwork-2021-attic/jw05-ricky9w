@@ -30,7 +30,7 @@ public class Bullet extends Thing {
         world.put(new Floor(world), xPrev, yPrev);
     }
 
-    public void action() {
+    public synchronized void action() {
         int xTar = this.getX() + Thing.dirs[dir][0];
         int yTar = this.getY() + Thing.dirs[dir][1];
         if(!world.inBound(xTar, yTar)){
@@ -47,7 +47,6 @@ public class Bullet extends Thing {
             }
             screen.deleteBullet(this);
         } else if(t instanceof Bullet) {
-            //TODO:BULLET
             Bullet b = (Bullet) t;
             screen.deleteBullet(b);
             screen.deleteBullet(this);

@@ -50,6 +50,17 @@ public class MazeGenerator {
     }
 
     public int[][] getArrayMaze() {
+        Random r = new Random();
+        for(int i = 0; i < 1000; i++) {
+            int x = r.nextInt(dimension);
+            int y = r.nextInt(dimension);
+            int n = r.nextInt(3);
+            for(int j = 0; j < n; j++){
+                if(x + j < dimension && y + j < dimension)
+                    this.maze[x + j][y + j] = 1;
+            }
+        }
+
         return this.maze;
     }
 

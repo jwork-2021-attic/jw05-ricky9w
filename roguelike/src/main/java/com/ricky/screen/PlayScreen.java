@@ -37,7 +37,7 @@ public class PlayScreen implements Screen {
     private final int PANEL_TOP = 6;
 
     // 最大怪物数量
-    private final int MAX_MONSTERS = 5;
+    private final int MAX_MONSTERS = 1;
 
     // 子弹飞行速度
     private final int BULLET_SPEED = 10;
@@ -202,6 +202,6 @@ public class PlayScreen implements Screen {
     }
 
     public void loseGame() {
-
+        
     }
 }

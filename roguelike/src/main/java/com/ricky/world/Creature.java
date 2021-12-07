@@ -13,7 +13,7 @@ public abstract class Creature extends Thing implements Runnable {
     
     Creature(Color color, char glyph, World world, PlayScreen screen) {
         super(color, glyph, world);
-        this.maxHP = 5;
+        this.maxHP = 1;
         this.hp = this.maxHP;
         this.screen = screen;
         this.power = 1;
