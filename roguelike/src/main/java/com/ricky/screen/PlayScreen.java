@@ -37,11 +37,15 @@ public class PlayScreen implements Screen {
     private final int PANEL_TOP = 6;
 
     // 最大怪物数量
-    private final int MAX_MONSTERS = 1;
+    private final int MAX_MONSTERS = 10;
+    private int cnt_monsters;
 
     // 子弹飞行速度
     private final int BULLET_SPEED = 10;
     private int bullet_wait = 0;
+
+    private boolean lose;
+    private boolean win;
 
     public PlayScreen() {
         world = new World();
@@ -56,6 +60,9 @@ public class PlayScreen implements Screen {
         this.props = new ArrayList<Prop>();
         this.deletedProps = new ArrayList<Prop>();
 
+        lose = false;
+        win = false;
+
         control = new GameControl(this);
         control.start();
 
@@ -63,6 +70,7 @@ public class PlayScreen implements Screen {
         for(int i = 0; i < MAX_MONSTERS; i++) {
             this.addMonster();
         }
+        this.cnt_monsters = MAX_MONSTERS;
     }
 
     private void messageUpdate(AsciiPanel terminal) {
@@ -114,6 +122,11 @@ public class PlayScreen implements Screen {
 
     @Override
     public Screen respondToUserInput(KeyEvent key) {
+        System.out.println(String.format("win: %b, lose: %b, hp: %d", win, lose, player.getHP()));
+        if(lose == true || player.getHP() <= 0)
+            return new LoseScreen();
+        if(win == true)
+            return new WinScreen();
         int code = key.getKeyCode();
         if(code == KeyEvent.VK_SPACE) {
             // 放置炸弹
@@ -166,42 +179,49 @@ public class PlayScreen implements Screen {
         control.addMonster(m);
     }
 
-    public void deleteMonster(Monster m) {
+    public synchronized void deleteMonster(Monster m) {
         int x = m.getX();
         int y = m.getY();
         world.put(new Floor(world), x, y);
         monsters.remove(m);
+        cnt_monsters--;
+        if(cnt_monsters <= 0)
+            winGame();
     }
 
-    public void addBullet(Bullet b) {
+    public synchronized void addBullet(Bullet b) {
         bullets.add(b);
     }
 
-    public void deleteBullet(Bullet b) {
+    public synchronized void deleteBullet(Bullet b) {
         deletedBullets.add(b);
     }
 
-    public void addBomb(Bomb b) {
+    public synchronized void addBomb(Bomb b) {
         bombs.add(b);
     }
     
-    public void deleteBomb(Bomb b) {
+    public synchronized void deleteBomb(Bomb b) {
         deletedBombs.add(b);
     }
 
-    public void triggerBomb() {
+    public synchronized void triggerBomb() {
         // TODO: 炸弹爆炸特效
     }
 
-    public void addProp(Prop p) {
+    public synchronized void addProp(Prop p) {
         this.props.add(p);
     }
 
-    public void deleteProp(Prop p) {
+    public synchronized void deleteProp(Prop p) {
         this.deletedProps.add(p);
     }
 
     public void loseGame() {
-        
+        this.lose = true;
+    }
+
+    public void winGame() {
+        this.win = true;
     }
 }

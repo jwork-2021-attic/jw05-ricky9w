@@ -12,7 +12,8 @@ import com.ricky.screen.PlayScreen;
 
 public class Monster extends Creature {
 
-    
+    private long lastAttack = -1;
+    private int ATTACK_CD = 100;
     
     public Monster(Color color, World world, PlayScreen screen) {
         super(color, (char)2, world, screen);
@@ -70,6 +71,16 @@ public class Monster extends Creature {
     }
 
     public synchronized void attack() {
+        if(lastAttack == -1)
+            lastAttack = System.currentTimeMillis();
+        else {
+            long now = System.currentTimeMillis();
+            if(now - lastAttack < ATTACK_CD)
+                return;
+            else {
+                lastAttack = now;
+            }
+        }
         Random r = new Random();
         int n = r.nextInt(4);
         int xTar = this.getX() + Thing.dirs[n][0];
@@ -87,6 +98,12 @@ public class Monster extends Creature {
             screen.addBullet(b);
         } else if(t instanceof Prop) {
             Prop p = (Prop) t;
+            screen.deleteProp(p);
+        } else if(t instanceof Bullet) {
+            Bullet b = (Bullet) t;
+            screen.deleteBullet(b);
+        } else if(t instanceof Prop) {
+            Prop p =(Prop) t;
             screen.deleteProp(p);
         }
     }

@@ -20,11 +20,14 @@ public class Player extends Creature {
     @Override
     public void run() {
         try {
-            while(true) {
+            while(hp > 0) {
                 TimeUnit.MILLISECONDS.sleep(10);
+                /*
                 if(hp <= 0)
                     // 游戏结束
                     screen.loseGame();
+                    break;
+                */
             }
         } catch(InterruptedException e) {
             System.out.println("Player thread interrupted!");
