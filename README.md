@@ -51,7 +51,4 @@ ricky.wang@smail.nju.edu.cn
 `PlayScreen` 类中负责处理玩家输入和游戏数据, 并调用 `World` 类中的各类接口实现游戏主要逻辑控制和画面更新. `Screen` 类提供统一的接口 `update()` 用于进行游戏中相关数据的更新.
 
 ## 效果演示
-
-<video id="video" controls="" preload="none">
-      <source id="mp4" src="./demo.mp4" type="video/mp4">
-</videos>
+[演示视频](./demo.mp4)
